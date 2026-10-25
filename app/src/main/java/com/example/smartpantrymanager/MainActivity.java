@@ -42,21 +42,24 @@ public class MainActivity extends AppCompatActivity implements PantryAdapter.Lis
                 startActivity(new Intent(MainActivity.this, AddEditItemActivity.class)));
     }
 
-    // Runs every time the screen becomes visible again (e.g. after saving an item)
+
     @Override
     protected void onResume() {
         super.onResume();
         loadPantry();
     }
 
-    // Reads all items from SQLite and refreshes the list
+
     private void loadPantry() {
+        boolean alerts = getSharedPreferences(SettingsActivity.PREFS_NAME, MODE_PRIVATE)
+                .getBoolean(SettingsActivity.KEY_EXPIRY_ALERTS, true);
         List<PantryItem> items = db.getAllPantryItems();
+        adapter.setHighlightExpiring(alerts);
         adapter.setItems(items);
         tvEmpty.setVisibility(items.isEmpty() ? View.VISIBLE : View.GONE);
     }
 
-    // Tapping a row opens the edit screen and passes the item's id
+
     @Override
     public void onItemClick(PantryItem item) {
         Intent intent = new Intent(this, AddEditItemActivity.class);
@@ -64,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements PantryAdapter.Lis
         startActivity(intent);
     }
 
-    // Tapping the bin asks for confirmation, then deletes from the database
+
     @Override
     public void onDeleteClick(PantryItem item) {
         new AlertDialog.Builder(this)
@@ -88,6 +91,9 @@ public class MainActivity extends AppCompatActivity implements PantryAdapter.Lis
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_suggested) {
             startActivity(new Intent(this, SuggestedRecipesActivity.class));
+            return true;
+        } else if (item.getItemId() == R.id.action_settings) {
+            startActivity(new Intent(this, SettingsActivity.class));
             return true;
         }
         return super.onOptionsItemSelected(item);

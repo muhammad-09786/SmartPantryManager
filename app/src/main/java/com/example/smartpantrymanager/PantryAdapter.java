@@ -21,6 +21,7 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.ViewHolder
 
     private List<PantryItem> items;
     private final Listener listener;
+    private boolean highlightExpiring = false;
 
     public PantryAdapter(List<PantryItem> items, Listener listener) {
         this.items = items;
@@ -32,7 +33,9 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.ViewHolder
         this.items = newItems;
         notifyDataSetChanged();
     }
-
+    public void setHighlightExpiring(boolean highlight) {
+        this.highlightExpiring = highlight;
+    }
 
     @NonNull
     @Override
@@ -54,11 +57,14 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.ViewHolder
             holder.tvExpiry.setVisibility(View.GONE);
         } else {
             holder.tvExpiry.setVisibility(View.VISIBLE);
-            holder.tvExpiry.setText("Expires: " + expiry);
+            if (highlightExpiring && isExpiringSoon(expiry)) {
+                holder.tvExpiry.setText("Expires soon: " + expiry);
+                holder.tvExpiry.setTextColor(0xFFD32F2F);
+            } else {
+                holder.tvExpiry.setText("Expires: " + expiry);
+                holder.tvExpiry.setTextColor(0xFF666666);
+            }
         }
-
-        holder.itemView.setOnClickListener(v -> listener.onItemClick(item));
-        holder.btnDelete.setOnClickListener(v -> listener.onDeleteClick(item));
     }
 
 
@@ -73,6 +79,18 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.ViewHolder
     }
 
 
+    private boolean isExpiringSoon(String expiry) {
+        try {
+            java.text.SimpleDateFormat fmt =
+                    new java.text.SimpleDateFormat("yyyy-MM-dd", java.util.Locale.US);
+            java.util.Date date = fmt.parse(expiry);
+            if (date == null) return false;
+            long threeDaysMs = 3L * 24 * 60 * 60 * 1000;
+            return date.getTime() - System.currentTimeMillis() <= threeDaysMs;
+        } catch (java.text.ParseException e) {
+            return false;
+        }
+    }
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvName, tvDetails, tvExpiry;
         ImageButton btnDelete;

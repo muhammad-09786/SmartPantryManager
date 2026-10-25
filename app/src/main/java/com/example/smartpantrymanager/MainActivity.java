@@ -79,6 +79,4 @@ public class MainActivity extends AppCompatActivity implements PantryAdapter.Lis
                 .setNegativeButton("Cancel", null)
                 .show();
     }
-
-
 }

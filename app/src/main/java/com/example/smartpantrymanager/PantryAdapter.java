@@ -9,7 +9,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.ViewHolder> {
 
@@ -28,11 +32,11 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.ViewHolder
         this.listener = listener;
     }
 
-
     public void setItems(List<PantryItem> newItems) {
         this.items = newItems;
         notifyDataSetChanged();
     }
+
     public void setHighlightExpiring(boolean highlight) {
         this.highlightExpiring = highlight;
     }
@@ -44,7 +48,6 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.ViewHolder
                 .inflate(R.layout.item_pantry, parent, false);
         return new ViewHolder(v);
     }
-
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
@@ -65,14 +68,16 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.ViewHolder
                 holder.tvExpiry.setTextColor(0xFF666666);
             }
         }
-    }
 
+
+        holder.itemView.setOnClickListener(v -> listener.onItemClick(item));
+        holder.btnDelete.setOnClickListener(v -> listener.onDeleteClick(item));
+    }
 
     @Override
     public int getItemCount() {
         return items.size();
     }
-
 
     private String formatQty(double q) {
         return (q == Math.floor(q)) ? String.valueOf((long) q) : String.valueOf(q);
@@ -81,16 +86,16 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.ViewHolder
 
     private boolean isExpiringSoon(String expiry) {
         try {
-            java.text.SimpleDateFormat fmt =
-                    new java.text.SimpleDateFormat("yyyy-MM-dd", java.util.Locale.US);
-            java.util.Date date = fmt.parse(expiry);
+            SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+            Date date = fmt.parse(expiry);
             if (date == null) return false;
             long threeDaysMs = 3L * 24 * 60 * 60 * 1000;
             return date.getTime() - System.currentTimeMillis() <= threeDaysMs;
-        } catch (java.text.ParseException e) {
+        } catch (ParseException e) {
             return false;
         }
     }
+
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvName, tvDetails, tvExpiry;
         ImageButton btnDelete;

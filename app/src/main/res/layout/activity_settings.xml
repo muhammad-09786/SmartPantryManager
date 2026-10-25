@@ -1,42 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp"
     android:fitsSystemWindows="true">
 
-    <Switch
-        android:id="@+id/switchExpiry"
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNav"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="48dp"
-        android:text="Expiring-soon alerts (highlight items expiring within 3 days)"
-        android:textSize="16sp" />
+        android:layout_alignParentBottom="true"
+        app:menu="@menu/bottom_nav_menu" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:text="Preferred units"
-        android:textSize="16sp" />
-
-    <RadioGroup
-        android:id="@+id/radioUnits"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:layout_above="@id/bottomNav"
+        android:orientation="vertical"
+        android:padding="16dp">
 
-        <RadioButton
-            android:id="@+id/radioMetric"
+        <Switch
+            android:id="@+id/switchExpiry"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="48dp"
+            android:text="Expiring-soon alerts (highlight items expiring within 3 days)"
+            android:textSize="16sp" />
+
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Metric (g, kg, ml, l)" />
+            android:layout_marginTop="24dp"
+            android:text="Preferred units"
+            android:textSize="16sp" />
 
-        <RadioButton
-            android:id="@+id/radioCooking"
-            android:layout_width="wrap_content"
+        <RadioGroup
+            android:id="@+id/radioUnits"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Cooking (cup, tbsp, tsp)" />
-    </RadioGroup>
-</LinearLayout>
+            android:orientation="vertical">
+
+            <RadioButton
+                android:id="@+id/radioMetric"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Metric (g, kg, ml, l)" />
+
+            <RadioButton
+                android:id="@+id/radioCooking"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cooking (cup, tbsp, tsp)" />
+        </RadioGroup>
+    </LinearLayout>
+</RelativeLayout>

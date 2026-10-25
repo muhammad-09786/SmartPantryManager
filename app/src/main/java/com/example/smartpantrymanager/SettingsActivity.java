@@ -51,6 +51,11 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        NavHelper.setup(this, R.id.nav_settings);
+    }
+    @Override
     public boolean onSupportNavigateUp() {
         finish();
         return true;

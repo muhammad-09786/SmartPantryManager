@@ -50,7 +50,7 @@ There are three tables:
 
 You'll need Android Studio and either an emulator or a phone running Android 7.0 (API 24) or newer.
 
-1. Clone the repo: `git clone https://github.com/[muhammad-09786]/SmartPantryManager.git`
+1. Clone the repo: `git clone https://github.com/muhammad-09786/SmartPantryManager.git`
 2. In Android Studio, choose File, then Open, and pick the `SmartPantryManager` folder.
 3. Let Gradle finish syncing. This can take a few minutes the first time.
 4. Pick an emulator in Device Manager, or plug in your phone with USB debugging on.
